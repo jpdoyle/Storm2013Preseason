@@ -1,4 +1,4 @@
-package storm2013.preseason.behaviors.teleop;
+package storm2013.preseason.commands.teleop;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitForChildren;

@@ -31,9 +31,7 @@ public class DriveTrain extends Subsystem {
         updateTable();
     }
 
-    protected void initDefaultCommand() {
-        setDefaultCommand(new SmoothTankDrive());
-    }
+    protected void initDefaultCommand() {}
 
     public void drive(double left,double right) {
         drive_.tankDrive(left, -right);
