@@ -21,11 +21,22 @@ public class DriveTrain extends Subsystem {
 
     private final Solenoid highGear_ = new Solenoid(RobotMap.PORT_SOLENOID_HIGH_GEAR),
                            lowGear_  = new Solenoid(RobotMap.PORT_SOLENOID_LOW_GEAR);
+    
+    
+    private static DriveTrain instance_ = null;
+    
+    public static DriveTrain getInstance() {
+        if(instance_ == null) {
+            instance_ = new DriveTrain();
+        }
+        return instance_;
+    }
+    
 
     // DOES NOT call drive_.setInvertedMotor() because it would only affect
     // output, and therefore cannot be used in accelerateToward(). Instead,
     // everything to do with the right gets negated manually.
-    public DriveTrain() {
+    private DriveTrain() {
         highGear_.set(false);
         lowGear_.set(true);
         updateTable();

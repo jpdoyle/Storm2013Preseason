@@ -1,6 +1,9 @@
 package storm2013.preseason.commands;
 
-public class SmoothTankDrive extends CommandBase {
+import edu.wpi.first.wpilibj.command.Command;
+import storm2013.preseason.RobotSubsystems;
+
+public class SmoothTankDrive extends Command {
     public static final double VALUE_SPEED_ACCELERATION = 1;
     public static final double VALUE_SPEED_DECELERATION = 1;
     
@@ -15,7 +18,7 @@ public class SmoothTankDrive extends CommandBase {
     }
 
     protected void execute() {
-        accelerate_.setTarget(oi.getDriveLeftAxis(),oi.getDriveRightAxis());
+        accelerate_.setTarget(RobotSubsystems.oi.getDriveLeftAxis(),RobotSubsystems.oi.getDriveRightAxis());
     }
 
     protected boolean isFinished() {

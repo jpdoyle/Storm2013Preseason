@@ -2,7 +2,7 @@ package storm2013.preseason;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import storm2013.preseason.commands.CommandBase;
+import edu.wpi.first.wpilibj.command.Command;
 import storm2013.preseason.commands.SmoothTankDrive;
 
 public class OI {
@@ -54,7 +54,7 @@ public class OI {
     private double driveMultiplier_ = VALUE_DRIVE_SPEED_NORMAL;
 
     private OI() {
-        buttonSpeedModifier_.whileHeld(new CommandBase() {
+        buttonSpeedModifier_.whileHeld(new Command() {
             protected void initialize() {
                 driveMultiplier_ = VALUE_DRIVE_SPEED_REDUCTION;
             }
@@ -73,7 +73,33 @@ public class OI {
                 end();
             }
         });
-        buttonDirectDrive_.whileHeld(new SmoothTankDrive());
+        buttonDirectDrive_.whileHeld(new Command() {
+            Command smoothDrive = new SmoothTankDrive();
+            Command oldCommand = RobotSubsystems.driveTrain.getCurrentCommand();
+
+            protected void initialize() {
+                smoothDrive = new SmoothTankDrive();
+                oldCommand.cancel();
+                smoothDrive.start();
+            }
+
+            protected void execute() {
+            }
+
+            protected boolean isFinished() {
+                return !smoothDrive.isRunning();
+            }
+
+            protected void end() {
+                smoothDrive.cancel();
+                oldCommand.start();
+            }
+
+            protected void interrupted() {
+                end();
+            }
+                
+        });
     }
 
     private double correctForDeadzone_(double axisValue) {

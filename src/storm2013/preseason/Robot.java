@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import storm2013.preseason.commands.CommandBase;
 import storm2013.preseason.commands.NullCommand;
 
 public class Robot extends IterativeRobot {
@@ -15,7 +14,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         scheduler = Scheduler.getInstance();
         
-        CommandBase.init();
+        RobotSubsystems.init();
         
         autonomousCommand = new NullCommand();
         teleopCommand     = new NullCommand();
@@ -44,11 +43,13 @@ public class Robot extends IterativeRobot {
         autonomousCommand.cancel();
     }
 
-    public void disabledPeriodic() {
-        Timer.delay(0.1);
-    }
+    public void disabledPeriodic() {}
 
     public void autonomousContinuous() {
+        // Wait for data from the driver station
+        // This prevents continuous from using 100% CPU, while also preventing 
+        // the default continuous functions from yelling at us for not
+        // implementing them
         m_ds.waitForData();
     }
 

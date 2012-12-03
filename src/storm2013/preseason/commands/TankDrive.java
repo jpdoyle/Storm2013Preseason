@@ -1,14 +1,22 @@
 package storm2013.preseason.commands;
 
-public class TankDrive extends CommandBase {
+import edu.wpi.first.wpilibj.command.Command;
+import storm2013.preseason.OI;
+import storm2013.preseason.RobotSubsystems;
+import storm2013.preseason.subsystems.DriveTrain;
+
+public class TankDrive extends Command {
+    private DriveTrain driveTrain_ = RobotSubsystems.driveTrain;
+    private OI oi_ = RobotSubsystems.oi;
+    
     public TankDrive() {
-        requires(driveTrain);
+        requires(driveTrain_);
     }
 
     protected void initialize() {}
 
     protected void execute() {
-        driveTrain.drive(oi.getDriveLeftAxis(), oi.getDriveRightAxis());
+        driveTrain_.drive(oi_.getDriveLeftAxis(), oi_.getDriveRightAxis());
     }
 
     protected boolean isFinished() {
