@@ -1,12 +1,16 @@
 package storm2013.preseason.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import storm2013.preseason.RobotSubsystems;
+import storm2013.preseason.subsystems.DriveTrain;
 
 /**
  *
  * @author joe
  */
-public class AccelerateToward extends CommandBase {
+public class AccelerateToward extends Command {
+    private DriveTrain driveTrain_ = RobotSubsystems.getInstance().driveTrain;
     
     private double left_ = 0,right_ = 0;
     private double accelRate_ = 1,decelRate_ = 1;
@@ -20,7 +24,7 @@ public class AccelerateToward extends CommandBase {
         accelRate_ = accelRate;
         decelRate_ = decelRate;
         time_ = new Timer();
-        requires(driveTrain);
+        requires(driveTrain_);
     }
     
     public void setTargetRight(double right) {
@@ -65,8 +69,8 @@ public class AccelerateToward extends CommandBase {
         double dt = time_.get()/1000;
         time_.reset();
         
-        double currLeftSpeed  = driveTrain.getLeftSpeed(),
-               currRightSpeed = driveTrain.getRightSpeed();
+        double currLeftSpeed  = driveTrain_.getLeftSpeed(),
+               currRightSpeed = driveTrain_.getRightSpeed();
         
         // Determine required rate - takes account for negative being backward
         // so that it always accelerates at accelRate/sec and always decelerates
@@ -97,7 +101,7 @@ public class AccelerateToward extends CommandBase {
             newRightSpeed = right_;
         }
         
-        driveTrain.drive(newLeftSpeed,newRightSpeed);
+        driveTrain_.drive(newLeftSpeed,newRightSpeed);
     }
     protected boolean isFinished() {
         return false;

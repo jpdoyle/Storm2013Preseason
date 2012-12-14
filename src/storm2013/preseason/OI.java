@@ -2,8 +2,12 @@ package storm2013.preseason;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import storm2013.preseason.commands.CommandBase;
+import edu.wpi.first.wpilibj.command.Command;
+import storm2013.preseason.commands.ReplaceCommand;
+import storm2013.preseason.commands.ReplaceSubsystemCommand;
 import storm2013.preseason.commands.SmoothTankDrive;
+import storm2013.preseason.commands.TankDrive;
+import storm2013.preseason.subsystems.DriveTrain;
 
 public class OI {
     // Joysticks
@@ -31,19 +35,6 @@ public class OI {
     public static final int BUTTON_JOYSTICK_SHOOT_PRESHOOT        = 8;
     public static final int BUTTON_JOYSTICK_SHOOT_WARMUP_SHOOTER  = 4;
 
-    public static final double VALUE_DRIVE_SPEED_NORMAL    = 1.0;
-    public static final double VALUE_DRIVE_SPEED_REDUCTION = 0.65;
-
-    // make OI a lazy singleton
-    private static OI instance_;
-
-    public static OI getInstance() {
-        if(instance_ == null) {
-            instance_ = new OI();
-        }
-        return instance_;
-    }
-
     
     private final Joystick joystickDrive_ = new Joystick(PORT_JOYSTICK_DRIVE),
                            joystickShoot_ = new Joystick(PORT_JOYSTICK_SHOOT);
@@ -51,12 +42,11 @@ public class OI {
                                     new JoystickButton(joystickDrive_, BUTTON_JOYSTICK_DRIVE_SPEED_MODIFIER),
                                  buttonDirectDrive_ =
                                     new JoystickButton(joystickDrive_, BUTTON_JOYSTICK_DRIVE_DIRECT_DRIVE);
-    private double driveMultiplier_ = VALUE_DRIVE_SPEED_NORMAL;
 
-    private OI() {
-        buttonSpeedModifier_.whileHeld(new CommandBase() {
+    public OI(final DriveTrain driveTrain) {
+        buttonSpeedModifier_.whileHeld(new Command() {
             protected void initialize() {
-                driveMultiplier_ = VALUE_DRIVE_SPEED_REDUCTION;
+                driveTrain.setLowSpeed(true);
             }
 
             protected void execute() {}
@@ -66,14 +56,15 @@ public class OI {
             }
 
             protected void end() {
-                driveMultiplier_ = VALUE_DRIVE_SPEED_NORMAL;
+                driveTrain.setLowSpeed(true);
             }
 
             protected void interrupted() {
                 end();
             }
         });
-        buttonDirectDrive_.whileHeld(new SmoothTankDrive());
+        buttonDirectDrive_.whileHeld(new ReplaceSubsystemCommand(driveTrain,
+                                                                 new TankDrive()));
     }
 
     private double correctForDeadzone_(double axisValue) {
@@ -85,16 +76,14 @@ public class OI {
         if(both != 0) {
             return both;
         }
-        return driveMultiplier_*
-                -correctForDeadzone_(joystickDrive_.getRawAxis(AXIS_JOYSTICK_DRIVE_LEFT));
+        return -correctForDeadzone_(joystickDrive_.getRawAxis(AXIS_JOYSTICK_DRIVE_LEFT));
     }
     public double getDriveRightAxis() {
         double both = -correctForDeadzone_(joystickDrive_.getRawAxis(AXIS_JOYSTICK_DRIVE_BOTH));
         if(both > 0) {
             return both;
         }
-        return driveMultiplier_*
-                -correctForDeadzone_(joystickDrive_.getRawAxis(AXIS_JOYSTICK_DRIVE_RIGHT));
+        return -correctForDeadzone_(joystickDrive_.getRawAxis(AXIS_JOYSTICK_DRIVE_RIGHT));
     }
 
     public double get3baAxis() {
