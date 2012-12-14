@@ -10,7 +10,7 @@ import storm2013.preseason.subsystems.DriveTrain;
  * @author joe
  */
 public class AccelerateToward extends Command {
-    private DriveTrain driveTrain_ = RobotSubsystems.driveTrain;
+    private DriveTrain driveTrain_ = RobotSubsystems.getInstance().driveTrain;
     
     private double left_ = 0,right_ = 0;
     private double accelRate_ = 1,decelRate_ = 1;
