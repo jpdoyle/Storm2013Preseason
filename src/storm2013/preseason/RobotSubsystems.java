@@ -4,6 +4,7 @@
  */
 package storm2013.preseason;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import storm2013.preseason.subsystems.DriveTrain;
 
 /**
@@ -13,11 +14,19 @@ import storm2013.preseason.subsystems.DriveTrain;
 public class RobotSubsystems {
     private RobotSubsystems() {}
     
-    public static OI oi;
-    public static DriveTrain driveTrain;
+    private static RobotSubsystems instance_ = null;
     
-    public static void init() {
-        oi = OI.getInstance();
-        driveTrain = DriveTrain.getInstance();
+    public static RobotSubsystems getInstance() {
+        if(instance_ == null) {
+            instance_ = new RobotSubsystems();
+        }
+        return instance_;
     }
+    
+    public void sendToDashboard() {
+        SmartDashboard.putData(driveTrain);
+    }
+    
+    public final DriveTrain driveTrain = new DriveTrain();
+    public final OI oi = new OI(driveTrain);
 }

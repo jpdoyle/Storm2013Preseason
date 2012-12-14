@@ -2,7 +2,6 @@ package storm2013.preseason;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import storm2013.preseason.commands.NullCommand;
@@ -14,7 +13,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         scheduler = Scheduler.getInstance();
         
-        RobotSubsystems.init();
+        RobotSubsystems.getInstance();
         
         autonomousCommand = new NullCommand();
         teleopCommand     = new NullCommand();

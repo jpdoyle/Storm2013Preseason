@@ -6,8 +6,9 @@ import storm2013.preseason.RobotSubsystems;
 import storm2013.preseason.subsystems.DriveTrain;
 
 public class TankDrive extends Command {
-    private DriveTrain driveTrain_ = RobotSubsystems.driveTrain;
-    private OI oi_ = RobotSubsystems.oi;
+    private RobotSubsystems subsystems_ = RobotSubsystems.getInstance();
+    private DriveTrain driveTrain_ = subsystems_.driveTrain;
+    private OI oi_ = subsystems_.oi;
     
     public TankDrive() {
         requires(driveTrain_);

@@ -18,7 +18,8 @@ public class SmoothTankDrive extends Command {
     }
 
     protected void execute() {
-        accelerate_.setTarget(RobotSubsystems.oi.getDriveLeftAxis(),RobotSubsystems.oi.getDriveRightAxis());
+        RobotSubsystems subsystems = RobotSubsystems.getInstance();
+        accelerate_.setTarget(subsystems.oi.getDriveLeftAxis(),subsystems.oi.getDriveRightAxis());
     }
 
     protected boolean isFinished() {
